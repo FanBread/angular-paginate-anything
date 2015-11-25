@@ -55,6 +55,8 @@
           size: '=?',
           passive: '@',
           transformResponse: '=?',
+          method: '@',
+          postData: '=?',
 
           // directive -> app communication only
           numPages: '=?',
@@ -67,7 +69,7 @@
           return attr.templateUrl || 'src/paginate-anything.html';
         },
         replace: true,
-        controller: ['$scope', '$http', function($scope, $http) {
+        controller: ['$rootScope', '$scope', '$http', function($rootScope, $scope, $http) {
 
           $scope.reloadPage   = false;
           $scope.serverLimit  = Infinity; // it's not known yet
@@ -129,9 +131,10 @@
           function requestRange(request) {
             $scope.$emit('pagination:loadStart', request);
             $http({
-              method: 'GET',
+              method: $scope.method || 'GET',
               url: $scope.url,
               params: $scope.urlParams,
+              data: $scope.postData,
               headers: angular.extend(
                 {}, $scope.headers,
                 { 'Range-Unit': 'items', Range: [request.from, request.to].join('-') }
@@ -297,6 +300,14 @@
               }
             }
           }, true);
+
+          $rootScope.$on('pagination:collection:updated', function() {
+            if($scope.page === 0){
+              $scope.reloadPage = true;
+            } else {
+              $scope.page = 0;
+            }
+          });
 
           var pp = $scope.perPage || defaultPerPage;
 
