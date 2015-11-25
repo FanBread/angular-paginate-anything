@@ -69,7 +69,7 @@
           return attr.templateUrl || 'src/paginate-anything.html';
         },
         replace: true,
-        controller: ['$scope', '$http', function($scope, $http) {
+        controller: ['$rootScope', '$scope', '$http', function($rootScope, $scope, $http) {
 
           $scope.reloadPage   = false;
           $scope.serverLimit  = Infinity; // it's not known yet
@@ -300,6 +300,14 @@
               }
             }
           }, true);
+
+          $rootScope.$on('pagination:collection:updated', function() {
+            if($scope.page === 0){
+              $scope.reloadPage = true;
+            } else {
+              $scope.page = 0;
+            }
+          });
 
           var pp = $scope.perPage || defaultPerPage;
 
