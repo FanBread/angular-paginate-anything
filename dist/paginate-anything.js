@@ -305,7 +305,8 @@
             if($scope.page === 0){
               $scope.reloadPage = true;
             } else {
-              $scope.page = 0;
+              $scope.reloadPage = true;
+              $scope.page = $scope.page;
             }
           });
 
