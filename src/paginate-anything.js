@@ -302,12 +302,7 @@
           }, true);
 
           $rootScope.$on('pagination:collection:updated', function() {
-            if($scope.page === 0){
-              $scope.reloadPage = true;
-            } else {
-              $scope.reloadPage = true;
-              $scope.page = $scope.page;
-            }
+            $scope.reloadPage = true;
           });
 
           var pp = $scope.perPage || defaultPerPage;
